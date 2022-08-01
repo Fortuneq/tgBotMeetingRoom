@@ -1,38 +1,70 @@
 package main
 
 import (
-    "log"
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"database/sql"
+	"fmt"
+	"log"
+	_  "github.com/lib/pq"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
+type Data struct{
+	id int
+	time string
+	in_meet bool
+}
 var numericKeyboard = tgbotapi.NewInlineKeyboardMarkup(
     tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("7:00", "\xE2\x98\x91"),
+        tgbotapi.NewInlineKeyboardButtonData("11:00", "\xE2\x98\x91"),
     ),
     tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("7:30", "7:30"),
+        tgbotapi.NewInlineKeyboardButtonData("11:30", "\xE2\x98\x91"),
     ),
 	tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("8:00", "7:00"),
+        tgbotapi.NewInlineKeyboardButtonData("12:00", "\xE2\x98\x91"),
     ),
     tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("8:30", "7:30"),
+        tgbotapi.NewInlineKeyboardButtonData("12:30", "\xE2\x98\x91"),
     ),
 	tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("9:00", "7:00"),
+        tgbotapi.NewInlineKeyboardButtonData("13:00", "\xE2\x98\x91"),
     ),
     tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("9:30", "7:30"),
+        tgbotapi.NewInlineKeyboardButtonData("13:30", "\xE2\x98\x91"),
     ),
 	tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("10:00", "7:00"),
+        tgbotapi.NewInlineKeyboardButtonData("14:00", "\xE2\x98\x91"),
     ),
     tgbotapi.NewInlineKeyboardRow(
-        tgbotapi.NewInlineKeyboardButtonData("10:30", "7:30"),
+        tgbotapi.NewInlineKeyboardButtonData("10:30", "\xE2\x98\x91"),
     ),
 )
 
+
+const (
+  host     = "localhost"
+  port     = 5432
+  user     = "postgres"
+  password = "537j04222"
+  dbname   = "postgres"
+)
 func main() {
+
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+    "password=%s dbname=%s sslmode=disable",
+    host, port, user, password, dbname)
+  db, err := sql.Open("postgres", psqlInfo)
+  if err != nil {
+    panic(err)
+  }
+  defer db.Close()
+
+  err = db.Ping()
+  if err != nil {
+    panic(err)
+  }
+
+  fmt.Println("Successfully connected!")
     bot, err := tgbotapi.NewBotAPI("5420203457:AAHxa3dlya-NkW4i8L62mbgkTEe8Mfo9OVY")
     if err != nil {
         log.Panic(err)
@@ -88,7 +120,16 @@ func main() {
 
             // And finally, send a message containing the data received.
             msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Data)
-            if _, err := bot.Send(msg); err != nil {
+            if msg.Text != "hi" {
+				data := `INSERT INTO users(id,in_time,in_meet) VALUES($1, $2, $3);`
+
+				//Выполняем наш SQL запрос
+				if _, err = db.Exec(data, Data.id,Data.in_time,Data.in_meet); err != nil {
+					log.Println(err)
+				}
+			}
+
+			if _, err := bot.Send(msg); err != nil {
                 panic(err)
             }
         }
