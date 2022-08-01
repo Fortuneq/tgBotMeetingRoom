@@ -44,6 +44,9 @@ var numericKeyboard = tgbotapi.NewInlineKeyboardMarkup(
 	
 )
 
+
+var Marcup = tgbotapi.NewInlineKeyboardMarkup()
+
 const (
 	host     = "localhost"
 	port     = 5432
@@ -97,10 +100,31 @@ func main() {
 			case "start":
 				msg.Text = "Хочешь занять переговорку?"
 				msg.ReplyMarkup = numericKeyboard
+				//tgbotapi.NewEditMessageReplyMarkup(update.CallbackQuery.Message.Chat.ChatConfig().ChatID,update.CallbackQuery.Message.MessageID,Marcup)
+				
 			case "show":
 				msg.Text = "Все записи в переговорку"
+				show :=  `SELECT * FROM meetings
+				WHERE in_meet = $1`
+				rows, err := db.Query(show,false)
+				if err != nil {
+					log.Fatal(err)
+				}
+				for rows.Next() {
+					var id int
+					var is_bool bool
+					if err := rows.Scan(&id,&msg.Text,&is_bool); err != nil {
+						log.Fatal(err)
+					}
+					if _, err := bot.Send(msg); err != nil {
+						panic(err)
+					}
+				}
+					
 			case "cancel":
 				msg.Text = "Хочешь отменить запись в переговорку?"
+
+
 
 			default:
 				msg.Text = "Не знаю такой команды "
@@ -118,37 +142,26 @@ func main() {
 			}
 
 			// And finally, send a message containing the data received.
-			//msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Data)
+			msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Data)
 
 			data := `INSERT INTO meetings(id,in_time,in_meet) VALUES($1, $2, $3);`
 
 			//Выполняем наш SQL запрос
 			if _, err = db.Exec(data, update.CallbackQuery.Message.MessageID, update.CallbackQuery.Data, true); err != nil {
-				log.Println(err)
-			}
-			/*if _, err := bot.Send(msg); err != nil {
+				msg.Text = fmt.Sprint(err)
+				msg.Text = "Сожалеем но на это время уже кто-то записан"
+				if _, err := bot.Send(msg); err != nil {
+					panic(err)
+				}
+			} else {			if _, err := bot.Send(msg); err != nil {
 				panic(err)
-			}*/
-		}
-	}
-}
+			}
+			msg.Text = "Вы были записаны,время указано выше ,удачи в переговорке :)"
+			if _, err := bot.Send(msg); err != nil {
+				panic(err)
+			}}
+			
 
-/*
-func  ListMeetings() ([]Meeting, error) {
-	items := []Meeting{}
-	for rows.Next() {
-		var i Meeting
-		if err := rows.Scan(&i.ID, &i.InTime, &i.InMeet); err != nil {
-			return nil, err
 		}
-		items = append(items, i)
 	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }
-*/
