@@ -1,11 +1,11 @@
 
-CREATE TABLE "users" (
+CREATE TABLE "meetings" (
   "id" SERIAL PRIMARY KEY not null,
   "in_time" text not null,
   "in_meet" boolean not null default(false)
 );
 
-insert into "users"(id,in_time,in_meet)
+insert into "meetings"(id,in_time,in_meet)
 values(1,'11:00','false'),
       (2,'11:30','false'),
       (3,'12:00','false'),
