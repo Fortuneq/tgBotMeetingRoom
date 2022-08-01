@@ -11,16 +11,38 @@ import (
 
 var numericKeyboard = tgbotapi.NewInlineKeyboardMarkup(
 	tgbotapi.NewInlineKeyboardRow(
-		tgbotapi.NewInlineKeyboardButtonData("11:00", "\xE2\x98\x91"),
+		tgbotapi.NewInlineKeyboardButtonData("11:00", "11:00"),
+		tgbotapi.NewInlineKeyboardButtonData("11:30", "11:30"),
+		tgbotapi.NewInlineKeyboardButtonData("12:00", "12:00"),
+		tgbotapi.NewInlineKeyboardButtonData("12:30","12:30"),
+
 	),
+	tgbotapi.NewInlineKeyboardRow(
+
+		tgbotapi.NewInlineKeyboardButtonData("13:00", "13:00"),
+		tgbotapi.NewInlineKeyboardButtonData("13:30", "13:30"),
+		tgbotapi.NewInlineKeyboardButtonData("14:00", "14:00"),
+		tgbotapi.NewInlineKeyboardButtonData("14:30", "14:30"),
+
+	),
+	tgbotapi.NewInlineKeyboardRow(
+
+		tgbotapi.NewInlineKeyboardButtonData("15:00", "15:00"),
+		tgbotapi.NewInlineKeyboardButtonData("15:30", "15:30"),
+		tgbotapi.NewInlineKeyboardButtonData("16:00", "16:00"),
+		tgbotapi.NewInlineKeyboardButtonData("16:30", "16:30"),
+
+	),
+	tgbotapi.NewInlineKeyboardRow(
+
+		tgbotapi.NewInlineKeyboardButtonData("17:00","17:00"),
+		tgbotapi.NewInlineKeyboardButtonData("17:30", "17:30"),
+		tgbotapi.NewInlineKeyboardButtonData("18:00", "18:00"),
+		tgbotapi.NewInlineKeyboardButtonData("18:30", "18:30"),
+
+	),
+	
 )
-
-
-type Meeting struct {
-	ID     int32  `json:"id"`
-	InTime string `json:"in_time"`
-	InMeet bool   `json:"in_meet"`
-}
 
 const (
 	host     = "localhost"
@@ -74,7 +96,7 @@ func main() {
 				msg.Text = "Бот понимает команды /cancel,/show and /start."
 			case "start":
 				msg.Text = "Хочешь занять переговорку?"
-					msg.ReplyMarkup = numericKeyboard
+				msg.ReplyMarkup = numericKeyboard
 			case "show":
 				msg.Text = "Все записи в переговорку"
 			case "cancel":
@@ -96,19 +118,17 @@ func main() {
 			}
 
 			// And finally, send a message containing the data received.
-			msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Data)
-			/* if msg.Text != "hi" {
-				data := `INSERT INTO users(id,in_time,in_meet) VALUES($1, $2, $3);`
+			//msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Data)
 
-				//Выполняем наш SQL запрос
-				if _, err = db.Exec(data, ,Data.in_time,Data.in_meet); err != nil {
-					log.Println(err)
-				}
+			data := `INSERT INTO meetings(id,in_time,in_meet) VALUES($1, $2, $3);`
+
+			//Выполняем наш SQL запрос
+			if _, err = db.Exec(data, update.CallbackQuery.Message.MessageID, update.CallbackQuery.Data, true); err != nil {
+				log.Println(err)
 			}
-			*/
-			if _, err := bot.Send(msg); err != nil {
+			/*if _, err := bot.Send(msg); err != nil {
 				panic(err)
-			}
+			}*/
 		}
 	}
 }
@@ -132,4 +152,3 @@ func  ListMeetings() ([]Meeting, error) {
 	return items, nil
 }
 */
-
