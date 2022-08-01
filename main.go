@@ -123,7 +123,12 @@ func main() {
 					
 			case "cancel":
 				msg.Text = "Хочешь отменить запись в переговорку?"
-
+				if update.Message.Text == "Да"{
+					msg.Text  = "Понял тебя , обкашливаю вопросик "
+					if _, err := bot.Send(msg); err != nil {
+						panic(err)
+					}
+				}
 
 
 			default:
