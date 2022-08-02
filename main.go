@@ -14,8 +14,7 @@ var numericKeyboard = tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardButtonData("11:00", "11:00"),
 		tgbotapi.NewInlineKeyboardButtonData("11:30", "11:30"),
 		tgbotapi.NewInlineKeyboardButtonData("12:00", "12:00"),
-		tgbotapi.NewInlineKeyboardButtonData("12:30","12:30"),
-
+		tgbotapi.NewInlineKeyboardButtonData("12:30", "12:30"),
 	),
 	tgbotapi.NewInlineKeyboardRow(
 
@@ -23,7 +22,6 @@ var numericKeyboard = tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardButtonData("13:30", "13:30"),
 		tgbotapi.NewInlineKeyboardButtonData("14:00", "14:00"),
 		tgbotapi.NewInlineKeyboardButtonData("14:30", "14:30"),
-
 	),
 	tgbotapi.NewInlineKeyboardRow(
 
@@ -31,19 +29,15 @@ var numericKeyboard = tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardButtonData("15:30", "15:30"),
 		tgbotapi.NewInlineKeyboardButtonData("16:00", "16:00"),
 		tgbotapi.NewInlineKeyboardButtonData("16:30", "16:30"),
-
 	),
 	tgbotapi.NewInlineKeyboardRow(
 
-		tgbotapi.NewInlineKeyboardButtonData("17:00","17:00"),
+		tgbotapi.NewInlineKeyboardButtonData("17:00", "17:00"),
 		tgbotapi.NewInlineKeyboardButtonData("17:30", "17:30"),
 		tgbotapi.NewInlineKeyboardButtonData("18:00", "18:00"),
 		tgbotapi.NewInlineKeyboardButtonData("18:30", "18:30"),
-
 	),
-	
 )
-
 
 var Marcup = tgbotapi.NewInlineKeyboardMarkup()
 
@@ -97,47 +91,53 @@ func main() {
 			switch update.Message.Command() {
 			case "help":
 				msg.Text = "Бот понимает команды /cancel,/show and /start."
+
+				if _, err = bot.Send(msg); err != nil {
+					panic(err)
+				}
 			case "start":
-				msg.Text = "Хочешь занять переговорку?"
+				msg.Text = "На какое время хочешь занять переговорку?"
+
 				msg.ReplyMarkup = numericKeyboard
-				//tgbotapi.NewEditMessageReplyMarkup(update.CallbackQuery.Message.Chat.ChatConfig().ChatID,update.CallbackQuery.Message.MessageID,Marcup)
-				
+
+				if _, err = bot.Send(msg); err != nil {
+					panic(err)
+				}
+
 			case "show":
-				msg.Text = "Все записи в переговорку"
-				show :=  `SELECT * FROM meetings
+				msg.Text = "Все записи в переговорку на сегодня"
+				show := `SELECT * FROM meetings
 				WHERE in_meet = $1`
-				rows, err := db.Query(show,false)
+				rows, err := db.Query(show, false)
 				if err != nil {
 					log.Fatal(err)
 				}
 				for rows.Next() {
 					var id int
 					var is_bool bool
-					if err := rows.Scan(&id,&msg.Text,&is_bool); err != nil {
+					if err := rows.Scan(&id, &msg.Text, &is_bool); err != nil {
 						log.Fatal(err)
 					}
 					if _, err := bot.Send(msg); err != nil {
 						panic(err)
 					}
 				}
-					
+
 			case "cancel":
 				msg.Text = "Хочешь отменить запись в переговорку?"
-				if update.Message.Text == "Да"{
-					msg.Text  = "Понял тебя , обкашливаю вопросик "
-					if _, err := bot.Send(msg); err != nil {
-						panic(err)
-					}
+				msg.ReplyMarkup = numericKeyboard
+				if _, err = bot.Send(msg); err != nil {
+					//panic(err)
+					log.Print(err)
 				}
-
 
 			default:
 				msg.Text = "Не знаю такой команды "
 			}
 			// Send the message.
-			if _, err = bot.Send(msg); err != nil {
+			/*if _, err = bot.Send(msg); err != nil {
 				panic(err)
-			}
+			}*/
 		} else if update.CallbackQuery != nil {
 			// Respond to the callback query, telling Telegram to show the user
 			// a message with the data received.
@@ -148,25 +148,43 @@ func main() {
 
 			// And finally, send a message containing the data received.
 			msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Data)
-
-			data := `INSERT INTO meetings(id,in_time,in_meet) VALUES($1, $2, $3);`
-
+			//data := `INSERT INTO meetings(id,in_time,in_meet) VALUES($1, $2, $3);`
+			data := `UPDATE meetings 
+			SET in_meet = true 
+			WHERE in_time = $1`
 			//Выполняем наш SQL запрос
-			if _, err = db.Exec(data, update.CallbackQuery.Message.MessageID, update.CallbackQuery.Data, true); err != nil {
-				msg.Text = fmt.Sprint(err)
-				msg.Text = "Сожалеем но на это время уже кто-то записан"
-				if _, err := bot.Send(msg); err != nil {
-					panic(err)
-				}
-			} else {			if _, err := bot.Send(msg); err != nil {
-				panic(err)
-			}
-			msg.Text = "Вы были записаны,время указано выше ,удачи в переговорке :)"
-			if _, err := bot.Send(msg); err != nil {
-				panic(err)
-			}}
-			
 
+			dbcheck := `SELECT in_meet from meetings WHERE in_time = $1`
+			var in_meet bool
+			row := db.QueryRow(dbcheck,update.CallbackQuery.Data)
+			switch err := row.Scan(&in_meet); err {
+				case sql.ErrNoRows:
+  					fmt.Println("No rows were returned!")
+				case nil:
+					if in_meet == true{
+						msg.Text = fmt.Sprint(err)
+						msg.Text = "Сожалеем но на это время уже кто-то записан"
+							if _, err := bot.Send(msg); err != nil {
+							panic(err)
+							}
+					} else {
+						if _, err = db.Exec(data, update.CallbackQuery.Data); err != nil {
+							msg.Text = fmt.Sprint(err)
+							msg.Text = "Сожалеем но на это время уже кто-то записан"
+							if _, err := bot.Send(msg); err != nil {
+								panic(err)
+							}
+						} else {
+							if _, err := bot.Send(msg); err != nil {
+								panic(err)
+							}
+							msg.Text = "Вы были записаны,время указано выше ,удачи в переговорке :)"
+							if _, err := bot.Send(msg); err != nil {
+								panic(err)
+							}
+						}
+				}
+			}
 		}
 	}
 }
