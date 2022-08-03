@@ -4,3 +4,5 @@ upmigrate:
 	migrate -database ${POSTGRESQL_URL} -path db/migrations up
 downmigrate:
 	migrate -database ${POSTGRESQL_URL} -path db/migrations down
+server :
+	go run main.go

@@ -1,1 +1,22 @@
 migrate -database postgres://postgres:537j04222@localhost:5432/postgres?sslmode=disable -path db/migrations up
+
+
+
+case "1":
+					show := `SELECT * FROM meetings_1
+				WHERE in_meet = $1`
+				rows, err := db.Query(show, false)
+				if err != nil {
+					log.Fatal(err)
+				}
+				for rows.Next() {
+					var id int
+					var is_bool bool
+					var in_what_room int
+					if err := rows.Scan(&id,&in_what_room, &msg.Text, &is_bool); err != nil {
+						log.Fatal(err)
+					}
+					if _, err := bot.Send(msg); err != nil {
+						panic(err)
+					}
+				}

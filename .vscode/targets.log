@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Aug  2 11:20:12 2022
+# Make data base, printed on Tue Aug  2 22:14:10 2022
 
 # Variables
 
@@ -61,17 +61,17 @@ VSCODE_CODE_CACHE_PATH = /home/vlad/.config/Code/CachedData/3b889b090b5ad5793f52
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.BEBIQ1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.B1GEQ1
 # default
 .LOADED := 
 # default
 .INCLUDE_DIRS = /usr/local/include /usr/include /usr/include
 # environment
-GNOME_TERMINAL_SERVICE = :1.146
+GNOME_TERMINAL_SERVICE = :1.168
 # makefile
 MAKEFLAGS = pqrR
 # environment
-DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=f7dc1a6143c70ed78f5de7f362e8db5e
+DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=d8e2046fcf5cbfea34c3c50062e9732c
 # makefile
 CURDIR := /home/vlad/Desktop/go/tgBotMeetingRoom
 # environment
@@ -101,19 +101,19 @@ SNAP_REEXEC =
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 8739
+VSCODE_PID = 5941
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/vlad-Lenovo-ideapad-330-15ARR:@/tmp/.ICE-unix/2101,unix/vlad-Lenovo-ideapad-330-15ARR:/tmp/.ICE-unix/2101
+SESSION_MANAGER = local/vlad-Lenovo-ideapad-330-15ARR:@/tmp/.ICE-unix/2595,unix/vlad-Lenovo-ideapad-330-15ARR:/tmp/.ICE-unix/2595
 # automatic
 *F = $(notdir $*)
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
 # environment
-DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus,guid=f7dc1a6143c70ed78f5de7f362e8db5e
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus,guid=d8e2046fcf5cbfea34c3c50062e9732c
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # environment
@@ -131,7 +131,7 @@ XMODIFIERS = @im=ibus
 # environment
 SHLVL = 1
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/64f9483c_8bf1_47b5_acb1_9002d523e3ee
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/44746316_8791_4e62_b9e8_0d234f593f03
 # environment
 MAKELEVEL := 0
 # default
@@ -139,7 +139,7 @@ MAKE = $(MAKE_COMMAND)
 # environment
 SNAP_COOKIE = w2Wb-VM8-eAhm9uV8JeVafh_gSHdN_5vCQNQdHkhTUdVqtaQ4qVc
 # environment
-PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/local/go/bin:/home/vlad/go/bin:/usr/local/go/bin
+PATH = /home/vlad/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/local/go/bin:/home/vlad/go/bin:/usr/local/go/bin
 # default
 MAKEFILES := 
 # environment
@@ -189,7 +189,7 @@ SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := upmigrate
 # environment
-SYSTEMD_EXEC_PID = 2101
+SYSTEMD_EXEC_PID = 2595
 # environment
 DISPLAY = :0
 # environment
@@ -258,7 +258,6 @@ ELECTRON_NO_ATTACH_CONSOLE = 1
 VTE_VERSION = 6800
 # environment
 SNAP_COMMON = /var/snap/code/common
- 
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
 # environment
@@ -280,6 +279,7 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Directories
 
+ 
 # . (device 2054, inode 135556): 13 files, no impossibilities.
 
 # 13 files, no impossibilities in 1 directories.
@@ -338,6 +338,6 @@ all:
 # strcache performance: lookups = 26 / hit rate = 23%
 # hash-table stats:
 # Load=20/8192=0%, Rehash=0, Collisions=0/26=0%
-# Finished Make data base on Tue Aug  2 11:20:12 2022
+# Finished Make data base on Tue Aug  2 22:14:10 2022
 
  
