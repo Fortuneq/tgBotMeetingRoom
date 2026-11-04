@@ -1,13 +1,13 @@
 # tgBotMeetingRoom
 
-### Бот для переговорк  
+### Telegram bot for booking a meeting room
 
 ```
-start - Бронь переговорки  
+start - Book a meeting room  
 ```
 ```
-cancel-Отмена брони  
+cancel - Cancel a booking  
 ```
 ```
-show - На текущую дату показывает статус переговорок  
+show - Show meeting room status for the current date  
 ```

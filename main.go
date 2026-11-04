@@ -255,7 +255,7 @@ func main() {
 			// And finally, send a message containing the data received.
 			msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Data)
 
-			//msg.Text = "ВВедите комментарий"
+			//msg.Text = "Enter a comment"
 
 
 			
@@ -265,7 +265,7 @@ func main() {
 			data := `UPDATE meetings 
 			SET in_meet = true 
 			WHERE in_time = $1`
-			//Выполняем наш SQL запрос
+			//Run our SQL query
 
 			dbcheck := `SELECT in_meet from meetings WHERE in_time = $1`
 			var in_meet bool
